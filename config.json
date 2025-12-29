@@ -1,0 +1,37 @@
+{
+  "n8nChatUrl": "https://flugia.app.n8n.cloud/webhook/chatBot",
+  "metadata": {
+    "company_id": 8,
+    "company_name": "Flugia",
+    "auth_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "BUSINESS_SECTOR": "AI Solutions",
+    "SERVICES": "Automatisation AI...",
+    "CHATBOT_NAME": "Emily"
+  },
+  "theme": {
+    "button": {
+      "backgroundColor": "#4CC4F0",
+      "right": 30,
+      "bottom": 30,
+      "size": 50,
+      "iconColor": "#FFFFFF",
+      "customIconSrc": "https://api.iconify.design/mdi/chat.svg?color=white",
+      "customIconSize": 40,
+      "borderRadius": "rounded"
+    },
+    "tooltip": {
+      "showTooltip": true,
+      "tooltipMessage": "Need help ? Contact us via chat 👋",
+      "tooltipBackgroundColor": "#F7F8FF",
+      "tooltipTextColor": "#1E1B4B"
+    },
+    "chatWindow": {
+      "title": "Emily",
+      "titleAvatarSrc": "https://i.postimg.cc/L4rh1Kb9/avatar.png",
+      "welcomeMessage": "Hello! 👋 I am loading dynamically from JSON!",
+      "backgroundColor": "#ffffff",
+      "height": 485,
+      "width": 350
+    }
+  }
+}
