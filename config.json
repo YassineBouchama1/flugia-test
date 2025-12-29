@@ -26,7 +26,7 @@
       "tooltipTextColor": "#1E1B4B"
     },
     "chatWindow": {
-      "title": "Emily",
+      "title": "Yassine",
       "titleAvatarSrc": "https://i.postimg.cc/L4rh1Kb9/avatar.png",
       "welcomeMessage": "Hello! 👋 I am loading dynamically from JSON!",
       "backgroundColor": "#ffffff",
