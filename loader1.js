@@ -1,78 +1,63 @@
 /**
- * Flugia Chatbot Loader
- * Dynamically loads and initializes the Flugia chatbot widget based on live API config.
+ * Flugia Chatbot Loader - Fixed Style Mapping
  */
 (async function () {
   const scriptTag = document.getElementById("flugia-chatbot-loader");
   const chatbotId = scriptTag ? scriptTag.getAttribute("data-chatbot-id") : null;
 
-  if (!chatbotId) {
-    console.warn("Flugia: Missing data-chatbot-id attribute");
-    return;
-  }
+  if (!chatbotId) return;
 
-  // Construct API URL based on script source domain
-  const scriptSrc = scriptTag ? scriptTag.getAttribute("src") : "";
-  // const apiBaseUrl = scriptSrc ? new URL(scriptSrc).origin : window.location.origin;
-    const apiBaseUrl = "http://54.195.141.232:8080"
-  const API_URL = `${apiBaseUrl}/api/v1/chatbot/config/${chatbotId}`;
+  // Change this to your actual backend URL
+  const API_URL = `http://54.195.141.232:8080/api/v1/chatbot/config/${chatbotId}`;
 
   try {
-    // 1. Fetch live chatbot configuration from API
     const response = await fetch(API_URL);
-    
-    if (!response.ok) {
-      console.error("Flugia: Failed to fetch chatbot configuration", response.status);
-      return;
-    }
+    if (!response.ok) return;
 
     const configData = await response.json();
 
-    // 2. Check if chatbot is active
+    // 1. Check if active
     if (configData.status !== "active" || configData.is_active !== true) {
-      console.log("Flugia: Chatbot is currently disabled by the owner.");
-      return; 
+      console.log("Flugia: Chatbot is currently disabled.");
+      return;
     }
 
-    // 3. Dynamically import the working library
+    // 2. Import the library
     const { default: Chatbot } = await import("https://cdn.n8nchatui.com/v1/pole-embed-yard.js");
 
-    // 4. Initialize the chatbot with the mapping you provided
-    if (Chatbot && typeof Chatbot.init === 'function') {
-      Chatbot.init({
-        webhookUrl: configData.n8nChatUrl,
-        metadata: configData.metadata || {},
-        chatInputKey: "chatInput",
-        chatSessionKey: "sessionId",
-        ...configData.theme,
-        showTooltip: configData.theme?.tooltip?.showTooltip,
-        tooltipMessage: configData.theme?.tooltip?.tooltipMessage,
-        tooltipBackgroundColor: configData.theme?.tooltip?.tooltipBackgroundColor,
-        tooltipTextColor: configData.theme?.tooltip?.tooltipTextColor,
-        
-        title: configData.theme?.chatWindow?.title,
-        titleAvatarSrc: configData.theme?.chatWindow?.titleAvatarSrc,
-        welcomeMessage: configData.theme?.chatWindow?.welcomeMessage,
-        backgroundColor: configData.theme?.chatWindow?.backgroundColor,
-        height: configData.theme?.chatWindow?.height,
-        width: configData.theme?.chatWindow?.width,
-        
-        // Handle specific styles if the library uses the nested format
-        botMessage: {
-          backgroundColor: configData.theme?.chatWindow?.botMessageColor,
-        },
-        userMessage: {
-          backgroundColor: configData.theme?.chatWindow?.userMessageColor,
-        },
-        textInput: {
-          placeholder: configData.theme?.chatWindow?.inputPlaceholder,
-          sendButtonColor: configData.theme?.chatWindow?.sendButtonColor
-        }
-      });
-      console.log("Flugia: Chatbot initialized successfully");
-    } else {
-      console.error("Flugia: Chatbot initialization failed - init function not found");
-    }
+    // 3. TRANSLATION LAYER (Crucial for Styles)
+    // We take your API data and put it exactly where the library code looks for it.
+    Chatbot.init({
+      webhookUrl: configData.n8nChatUrl,
+      metadata: configData.metadata || {},
+      
+      // The library looks for these keys at the ROOT of the theme object
+      ...configData.theme, // Spreads button and tooltip
+      
+      // Manually pull values out of your "chatWindow" object
+      title: configData.theme?.chatWindow?.title,
+      welcomeMessage: configData.theme?.chatWindow?.welcomeMessage,
+      titleAvatarSrc: configData.theme?.chatWindow?.titleAvatarSrc,
+      backgroundColor: configData.theme?.chatWindow?.backgroundColor,
+      height: configData.theme?.chatWindow?.height,
+      width: configData.theme?.chatWindow?.width,
+      
+      // Map your custom color keys to the library's nested style objects
+      botMessage: {
+        backgroundColor: configData.theme?.chatWindow?.botMessageColor,
+        showAvatar: true
+      },
+      userMessage: {
+        backgroundColor: configData.theme?.chatWindow?.userMessageColor,
+        showAvatar: false
+      },
+      textInput: {
+        placeholder: configData.theme?.chatWindow?.inputPlaceholder,
+        sendButtonColor: configData.theme?.chatWindow?.sendButtonColor
+      }
+    });
+
+    console.log("Flugia: Chatbot styles mapped and initialized.");
   } catch (error) {
     console.error("Flugia Loader Error:", error);
   }
