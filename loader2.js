@@ -45,6 +45,29 @@
         chatInputKey: "chatInput",
         chatSessionKey: "sessionId",
         ...configData.theme,
+        showTooltip: configData.theme?.tooltip?.showTooltip,
+        tooltipMessage: configData.theme?.tooltip?.tooltipMessage,
+        tooltipBackgroundColor: configData.theme?.tooltip?.tooltipBackgroundColor,
+        tooltipTextColor: configData.theme?.tooltip?.tooltipTextColor,
+        
+        title: configData.theme?.chatWindow?.title,
+        titleAvatarSrc: configData.theme?.chatWindow?.titleAvatarSrc,
+        welcomeMessage: configData.theme?.chatWindow?.welcomeMessage,
+        backgroundColor: configData.theme?.chatWindow?.backgroundColor,
+        height: configData.theme?.chatWindow?.height,
+        width: configData.theme?.chatWindow?.width,
+        
+        // Handle specific styles if the library uses the nested format
+        botMessage: {
+          backgroundColor: configData.theme?.chatWindow?.botMessageColor,
+        },
+        userMessage: {
+          backgroundColor: configData.theme?.chatWindow?.userMessageColor,
+        },
+        textInput: {
+          placeholder: configData.theme?.chatWindow?.inputPlaceholder,
+          sendButtonColor: configData.theme?.chatWindow?.sendButtonColor
+        }
       });
       console.log("Flugia: Chatbot initialized successfully");
     } else {
