@@ -83,7 +83,8 @@
 
     // 4. Initialize with Correct Data Mapping (Inspired by your working static code)
     Chatbot.init({
-      webhookUrl: configData.n8nChatUrl,
+      webhookUrl: "https://flugia.app.n8n.cloud/webhook/chatBot",
+      
       metadata: configData.metadata || {},
       theme: {
         button: configData.theme.button,
