@@ -36,8 +36,8 @@
                 "borderRadius": "rounded"
             },
             "tooltip": {
-                "showTooltip": true,
-                "tooltipMessage": "Need help? Chat with us!",
+                "showTooltip": false,
+                "tooltipMessage": "Need help? Chat with us yassine!",
                 "tooltipBackgroundColor": "#333333",
                 "tooltipTextColor": "#ffffff"
             },
