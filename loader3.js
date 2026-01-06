@@ -24,7 +24,7 @@
 
     // 2. Import the library
     const { default: Chatbot } = await import("https://cdn.n8nchatui.com/v1/pole-embed-yard.js");
-
+console.log(configData)
     // 3. TRANSLATION LAYER (Crucial for Styles)
     // We take your API data and put it exactly where the library code looks for it.
     Chatbot.init({
