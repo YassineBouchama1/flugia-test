@@ -38,7 +38,7 @@
           tooltipTextColor: "#ffffff",
         },
         chatWindow: {
-          title: "Yassie",
+          title: "hamada",
           titleAvatarSrc:
             "https://ai-service-testing.s3.eu-west-1.amazonaws.com/company_24/chatbot/72/73f6ecb3-8b69-41c9-8c2b-30db2b983fc7.png",
           welcomeMessage: "Hello! How can I help you today?",
