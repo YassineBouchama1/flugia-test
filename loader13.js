@@ -70,6 +70,8 @@
       console.log("Flugia: Chatbot is currently disabled.");
       return;
     }
+    window.N8N_CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
+  window.CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
 
     // 3. Import the library
     const { default: Chatbot } = await import(
@@ -78,7 +80,8 @@
 
     // 4. Initialize with full static configuration
     Chatbot.init({
-      "webhookUrl": configData.n8nChatUrl,
+"webhookUrl": configData.n8nChatUrl, // Standard key
+      "n8nChatUrl": configData.n8nChatUrl, // Your original script's key
       "metadata": configData.metadata,
       "theme": {
         "button": configData.theme.button,
