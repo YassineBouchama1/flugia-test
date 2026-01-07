@@ -30,7 +30,8 @@
         "COMPANY_EMAIL": "contact@flugia.com",
         "COMPANY_PHONE": "+1234567890",
         "DEFAULT_LANGUAGE": "en",
-        "SUPPORTED_LANGUAGES": ["en", "fr"]
+        "SUPPORTED_LANGUAGES": ["en", "fr"],
+        "chatbot_id":chatbotId,
       },
       "theme": {
         "button": {
