@@ -15,7 +15,7 @@
 
   // Construct API URL based on script source domain
   const scriptSrc = scriptTag ? scriptTag.getAttribute("src") : "";
-  const apiBaseUrl = "http://54.195.141.232:8080"
+  const apiBaseUrl = "http://54.195.141.232:8080";
   const API_URL = `${apiBaseUrl}/api/v1/chatbot/config/${chatbotId}`;
 
   try {
@@ -43,9 +43,9 @@
 
     // 4. Initialize with full static configuration
     Chatbot.init({
-      webhookUrl: configData.n8nChatUrl, // Standard key
-      n8nChatUrl: configData.n8nChatUrl, // Your original script's key
-      metadata: configData.metadata,
+      webhookUrl: configData.n8nChatUrl,
+      n8nChatUrl: configData.n8nChatUrl,
+      metadata: { ...configData.metadata, chatbot_id: chatbotId },
       theme: {
         button: configData.theme.button,
         tooltip: {
@@ -128,4 +128,3 @@
     console.error("Flugia Loader Error:", error);
   }
 })();
-
