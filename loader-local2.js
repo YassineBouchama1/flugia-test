@@ -67,7 +67,7 @@
           acceptButtonColor: configData.theme.button.backgroundColor,
           acceptButtonTextColor: "#ffffff",
           acceptButtonText: "Start Chatting",
-          backgroundColor: "#FFFDFD",
+          backgroundColor:configData.theme.chatWindow.headerColor,
         },
         chatWindow: {
           borderRadiusStyle: "rounded",
