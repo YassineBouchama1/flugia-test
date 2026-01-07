@@ -15,9 +15,7 @@
 
   // Construct API URL based on script source domain
   const scriptSrc = scriptTag ? scriptTag.getAttribute("src") : "";
-  const apiBaseUrl = scriptSrc
-    ? new URL(scriptSrc).origin
-    : window.location.origin;
+  const apiBaseUrl = "http://54.195.141.232:8080"
   const API_URL = `${apiBaseUrl}/api/v1/chatbot/config/${chatbotId}`;
 
   try {
