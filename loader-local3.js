@@ -47,7 +47,23 @@
       n8nChatUrl: configData.n8nChatUrl,
       metadata: { ...configData.metadata, chatbot_id: chatbotId },
       theme: {
-        button: configData.theme.button,
+        button: {
+          ...configData.theme.button,
+          backgroundColor: configData.theme.chatWindow.headerColor,
+          right: configData.theme.button.right,
+          bottom: configData.theme.button.bottom,
+          size: configData.theme.button.size,
+          iconColor: configData.theme.button.iconColor,
+          customIconSrc: configData.theme.button.customIconSrc,
+          customIconSize: configData.theme.button.customIconSize,
+          customIconBorderRadius: 16,
+          autoWindowOpen: {
+            autoOpen: true,
+            openDelay: 2,
+          },
+          borderRadius: configData.theme.button.borderRadius,
+        },
+
         tooltip: {
           ...configData.theme.tooltip,
           tooltipFontSize: 12,
@@ -67,7 +83,7 @@
           acceptButtonColor: configData.theme.button.backgroundColor,
           acceptButtonTextColor: "#ffffff",
           acceptButtonText: "Start Chatting",
-          backgroundColor:configData.theme.chatWindow.headerColor,
+          backgroundColor: configData.theme.chatWindow.headerColor,
         },
         chatWindow: {
           borderRadiusStyle: "rounded",
