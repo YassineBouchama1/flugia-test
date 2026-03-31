@@ -25,10 +25,10 @@
       return;
     }
 
-    // ── 1. Show custom lead form ──────────────────────────────────────────────
+    // 1. Show lead form first
     const userInfo = await collectUserInfo(configData);
 
-    // ── 2. Init chatbot with collected info in metadata ───────────────────────
+    // 2. Init chatbot
     window.N8N_CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
     window.CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
 
@@ -40,37 +40,99 @@
       metadata: {
         ...configData.metadata,
         chatbot_id: chatbotId,
-        user_name: userInfo.name,    // ← passed to your n8n workflow
+        user_name: userInfo.name,
         user_email: userInfo.email,
       },
       theme: {
-        // ... rest of your theme config unchanged
         button: {
           ...configData.theme.button,
           backgroundColor: configData.theme.chatWindow.headerColor,
-          autoWindowOpen: { autoOpen: true, openDelay: 0 }, // open immediately after form
+          right: configData.theme.button.right,
+          bottom: configData.theme.button.bottom,
+          size: configData.theme.button.size,
+          iconColor: configData.theme.button.iconColor,
+          customIconSrc: configData.theme.button.customIconSrc,
+          customIconSize: configData.theme.button.customIconSize,
+          customIconBorderRadius: 16,
+          autoWindowOpen: {
+            autoOpen: true,
+            openDelay: 0, // open immediately after form submitted
+          },
+          borderRadius: configData.theme.button.borderRadius,
         },
+        tooltip: {
+          ...configData.theme.tooltip,
+        },
+        customCSS: `
+          .chat-widget { font-family: 'Segoe UI', Arial, sans-serif !important; }
+          .tooltip, .tooltip-message { font-family: 'Segoe UI', Arial, sans-serif !important; }
+          * { -webkit-font-smoothing: antialiased !important; }
+        `,
+        direction: "ltr",
         consentScreen: {
-          enabled: false, // disable built-in consent since we have our own form
+          enabled: false, // ← our custom form replaces this
         },
-        // ... your other theme keys
+        chatWindow: {
+          borderRadiusStyle: "rounded",
+          avatarBorderRadius: 21,
+          messageBorderRadius: 6,
+          backgroundColor: configData.theme.chatWindow.backgroundColor,
+          height: configData.theme.chatWindow.height,
+          width: configData.theme.chatWindow.width,
+          fontSize: 12,
+          renderHTML: true,
+          clearChatOnReload: false,
+          showTitle: true,
+          title: configData.theme.chatWindow.title,
+          titleAvatarSrc: configData.theme.chatWindow.titleAvatarSrc,
+          avatarSize: 40,
+          welcomeMessage: configData.theme.chatWindow.welcomeMessage,
+          errorMessage: "Oops, technical issue! Please try again in a few seconds.",
+          starterPrompts: configData.theme.chatWindow.starterPrompts,
+          botMessage: {
+            backgroundColor: configData.theme.chatWindow.botMessageColor,
+            textColor: "#504e4e",
+            showAvatar: true,
+            avatarSrc: configData.theme.chatWindow.titleAvatarSrc,
+          },
+          userMessage: {
+            backgroundColor: configData.theme.chatWindow.userMessageColor,
+            textColor: "#ffffff",
+            showAvatar: false,
+          },
+          textInput: {
+            placeholder: configData.theme.chatWindow.inputPlaceholder,
+            backgroundColor: "#ffffff",
+            textColor: "#1e1e1f",
+            sendButtonColor: configData.theme.chatWindow.sendButtonColor,
+            maxChars: 5000,
+            borderRadius: 13,
+          },
+          uploadsConfig: {
+            enabled: configData.theme.uploadsConfig.enabled,
+            acceptFileTypes: ["pdf", "txt", "png", "jpg"],
+            maxSizeInMB: 10,
+          },
+          voiceInputConfig: {
+            enabled: configData.theme.voiceInputConfig.enabled,
+            maxRecordingTime: 10,
+          },
+        },
       },
     });
 
-    console.log("Flugia: Chatbot initialized for", userInfo.name);
+    console.log("Flugia: Chatbot initialized for", userInfo.name || "anonymous");
   } catch (error) {
     console.error("Flugia Loader Error:", error);
   }
 })();
 
-// ── Custom lead capture form ───────────────────────────────────────────────────
 function collectUserInfo(configData) {
   return new Promise((resolve) => {
     const headerColor = configData.theme?.chatWindow?.headerColor || "#6366f1";
     const avatarSrc = configData.theme?.chatWindow?.titleAvatarSrc || "";
     const title = configData.theme?.chatWindow?.title || "Chat with us";
 
-    // Inject styles
     const style = document.createElement("style");
     style.textContent = `
       #flugia-lead-overlay {
@@ -98,21 +160,12 @@ function collectUserInfo(configData) {
         width: 42px; height: 42px; border-radius: 50%;
         border: 2px solid rgba(255,255,255,0.4); object-fit: cover;
       }
-      #flugia-lead-header .info h3 {
-        margin: 0; color: #fff; font-size: 15px; font-weight: 600;
-      }
-      #flugia-lead-header .info p {
-        margin: 2px 0 0; color: rgba(255,255,255,0.8); font-size: 12px;
-      }
+      #flugia-lead-header .info h3 { margin: 0; color: #fff; font-size: 15px; font-weight: 600; }
+      #flugia-lead-header .info p { margin: 2px 0 0; color: rgba(255,255,255,0.8); font-size: 12px; }
       #flugia-lead-body { padding: 24px; }
-      #flugia-lead-body p {
-        margin: 0 0 18px; color: #555; font-size: 13px; line-height: 1.5;
-      }
+      #flugia-lead-body p { margin: 0 0 18px; color: #555; font-size: 13px; line-height: 1.5; }
       .flugia-field { margin-bottom: 14px; }
-      .flugia-field label {
-        display: block; font-size: 12px; font-weight: 600;
-        color: #333; margin-bottom: 5px;
-      }
+      .flugia-field label { display: block; font-size: 12px; font-weight: 600; color: #333; margin-bottom: 5px; }
       .flugia-field input {
         width: 100%; box-sizing: border-box;
         padding: 10px 13px; border: 1.5px solid #e0e0e0;
@@ -120,9 +173,7 @@ function collectUserInfo(configData) {
         outline: none; transition: border-color 0.2s;
       }
       .flugia-field input:focus { border-color: ${headerColor}; }
-      .flugia-field .error {
-        color: #e53e3e; font-size: 11px; margin-top: 4px; display: none;
-      }
+      .flugia-field .flugia-error { color: #e53e3e; font-size: 11px; margin-top: 4px; display: none; }
       #flugia-lead-submit {
         width: 100%; padding: 12px;
         background: ${headerColor}; color: #fff;
@@ -133,14 +184,12 @@ function collectUserInfo(configData) {
       #flugia-lead-submit:hover { opacity: 0.88; }
       #flugia-skip-link {
         display: block; text-align: center; margin-top: 12px;
-        font-size: 12px; color: #999; cursor: pointer;
-        text-decoration: underline;
+        font-size: 12px; color: #999; cursor: pointer; text-decoration: underline;
       }
       #flugia-skip-link:hover { color: #555; }
     `;
     document.head.appendChild(style);
 
-    // Build modal HTML
     const overlay = document.createElement("div");
     overlay.id = "flugia-lead-overlay";
     overlay.innerHTML = `
@@ -157,12 +206,12 @@ function collectUserInfo(configData) {
           <div class="flugia-field">
             <label for="flugia-name">Your Name</label>
             <input id="flugia-name" type="text" placeholder="e.g. Ahmed" autocomplete="name" />
-            <div class="error" id="flugia-name-err">Please enter your name.</div>
+            <div class="flugia-error" id="flugia-name-err">Please enter your name.</div>
           </div>
           <div class="flugia-field">
             <label for="flugia-email">Email Address</label>
             <input id="flugia-email" type="email" placeholder="you@example.com" autocomplete="email" />
-            <div class="error" id="flugia-email-err">Please enter a valid email.</div>
+            <div class="flugia-error" id="flugia-email-err">Please enter a valid email.</div>
           </div>
           <button id="flugia-lead-submit">Start Chatting →</button>
           <span id="flugia-skip-link">Skip for now</span>
