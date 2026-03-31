@@ -7,8 +7,8 @@
     return;
   }
 
-  const scriptSrc = scriptTag ? scriptTag.getAttribute("src") : "";
-  const apiBaseUrl = scriptSrc ? new URL(scriptSrc).origin : window.location.origin;
+  const apiBaseUrl =
+    scriptTag.getAttribute("data-api-url") || "https://api-dev.flugia.com";
   const API_URL = `${apiBaseUrl}/api/v1/chatbot/config/${chatbotId}`;
 
   try {
@@ -32,7 +32,9 @@
     window.N8N_CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
     window.CHATBOT_CONFIG = { webhookUrl: configData.n8nChatUrl };
 
-    const { default: Chatbot } = await import("https://cdn.n8nchatui.com/v1/pole-embed-yard.js");
+    const { default: Chatbot } = await import(
+      "https://cdn.n8nchatui.com/v1/pole-embed-yard.js"
+    );
 
     Chatbot.init({
       webhookUrl: configData.n8nChatUrl,
@@ -56,7 +58,7 @@
           customIconBorderRadius: 16,
           autoWindowOpen: {
             autoOpen: true,
-            openDelay: 0, // open immediately after form submitted
+            openDelay: 0,
           },
           borderRadius: configData.theme.button.borderRadius,
         },
@@ -70,7 +72,7 @@
         `,
         direction: "ltr",
         consentScreen: {
-          enabled: false, // ← our custom form replaces this
+          enabled: false,
         },
         chatWindow: {
           borderRadiusStyle: "rounded",
@@ -87,7 +89,8 @@
           titleAvatarSrc: configData.theme.chatWindow.titleAvatarSrc,
           avatarSize: 40,
           welcomeMessage: configData.theme.chatWindow.welcomeMessage,
-          errorMessage: "Oops, technical issue! Please try again in a few seconds.",
+          errorMessage:
+            "Oops, technical issue! Please try again in a few seconds.",
           starterPrompts: configData.theme.chatWindow.starterPrompts,
           botMessage: {
             backgroundColor: configData.theme.chatWindow.botMessageColor,
@@ -121,7 +124,10 @@
       },
     });
 
-    console.log("Flugia: Chatbot initialized for", userInfo.name || "anonymous");
+    console.log(
+      "Flugia: Chatbot initialized for",
+      userInfo.name || "anonymous"
+    );
   } catch (error) {
     console.error("Flugia Loader Error:", error);
   }
@@ -129,7 +135,8 @@
 
 function collectUserInfo(configData) {
   return new Promise((resolve) => {
-    const headerColor = configData.theme?.chatWindow?.headerColor || "#6366f1";
+    const headerColor =
+      configData.theme?.chatWindow?.headerColor || "#6366f1";
     const avatarSrc = configData.theme?.chatWindow?.titleAvatarSrc || "";
     const title = configData.theme?.chatWindow?.title || "Chat with us";
 
@@ -160,31 +167,45 @@ function collectUserInfo(configData) {
         width: 42px; height: 42px; border-radius: 50%;
         border: 2px solid rgba(255,255,255,0.4); object-fit: cover;
       }
-      #flugia-lead-header .info h3 { margin: 0; color: #fff; font-size: 15px; font-weight: 600; }
-      #flugia-lead-header .info p { margin: 2px 0 0; color: rgba(255,255,255,0.8); font-size: 12px; }
+      #flugia-lead-header .flugia-info h3 {
+        margin: 0; color: #fff; font-size: 15px; font-weight: 600;
+      }
+      #flugia-lead-header .flugia-info p {
+        margin: 2px 0 0; color: rgba(255,255,255,0.8); font-size: 12px;
+      }
       #flugia-lead-body { padding: 24px; }
-      #flugia-lead-body p { margin: 0 0 18px; color: #555; font-size: 13px; line-height: 1.5; }
+      #flugia-lead-body > p {
+        margin: 0 0 18px; color: #555; font-size: 13px; line-height: 1.5;
+      }
       .flugia-field { margin-bottom: 14px; }
-      .flugia-field label { display: block; font-size: 12px; font-weight: 600; color: #333; margin-bottom: 5px; }
+      .flugia-field label {
+        display: block; font-size: 12px; font-weight: 600;
+        color: #333; margin-bottom: 5px;
+      }
       .flugia-field input {
         width: 100%; box-sizing: border-box;
         padding: 10px 13px; border: 1.5px solid #e0e0e0;
         border-radius: 10px; font-size: 13px; color: #1e1e1f;
         outline: none; transition: border-color 0.2s;
+        font-family: 'Segoe UI', Arial, sans-serif;
       }
       .flugia-field input:focus { border-color: ${headerColor}; }
-      .flugia-field .flugia-error { color: #e53e3e; font-size: 11px; margin-top: 4px; display: none; }
+      .flugia-field .flugia-error {
+        color: #e53e3e; font-size: 11px; margin-top: 4px; display: none;
+      }
       #flugia-lead-submit {
         width: 100%; padding: 12px;
         background: ${headerColor}; color: #fff;
         border: none; border-radius: 10px;
         font-size: 14px; font-weight: 600; cursor: pointer;
         margin-top: 4px; transition: opacity 0.2s;
+        font-family: 'Segoe UI', Arial, sans-serif;
       }
       #flugia-lead-submit:hover { opacity: 0.88; }
       #flugia-skip-link {
         display: block; text-align: center; margin-top: 12px;
-        font-size: 12px; color: #999; cursor: pointer; text-decoration: underline;
+        font-size: 12px; color: #999; cursor: pointer;
+        text-decoration: underline;
       }
       #flugia-skip-link:hover { color: #555; }
     `;
@@ -196,7 +217,7 @@ function collectUserInfo(configData) {
       <div id="flugia-lead-card">
         <div id="flugia-lead-header">
           ${avatarSrc ? `<img src="${avatarSrc}" alt="avatar" />` : ""}
-          <div class="info">
+          <div class="flugia-info">
             <h3>${title}</h3>
             <p>We typically reply instantly</p>
           </div>
@@ -235,6 +256,13 @@ function collectUserInfo(configData) {
       document.getElementById("flugia-email-err").style.display = emailValid ? "none" : "block";
 
       if (name && emailValid) dismiss(name, email);
+    });
+
+    // Allow Enter key to submit
+    document.getElementById("flugia-lead-overlay").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("flugia-lead-submit").click();
+      }
     });
 
     document.getElementById("flugia-skip-link").addEventListener("click", () => {
