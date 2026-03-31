@@ -7,9 +7,8 @@
     return;
   }
 
-  const apiBaseUrl =
-    scriptTag.getAttribute("data-api-url") || "https://api-dev.flugia.com";
-  const API_URL = `${apiBaseUrl}/api/v1/chatbot/config/${chatbotId}`;
+
+  const API_URL = `https://api-dev.flugia.com/api/v1/chatbot/config/${chatbotId}`;
 
   try {
     const response = await fetch(API_URL);
